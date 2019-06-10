@@ -5,17 +5,29 @@
  */
 package com.quiezel.cuenta_familiar.view;
 
+import com.quiezel.cuenta_familiar.view.componentes.PanelUnico;
+import java.awt.CardLayout;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author Chalio
  */
+@Component
 public class Ventana extends javax.swing.JFrame {
+    private ApplicationContext context;
+    private CardLayout cardLayout;
 
     /**
      * Creates new form ventana
+     * @param context
      */
-    public Ventana() {
+    public Ventana(ApplicationContext context) {
         initComponents();
+        this.context = context;
+        cardLayout = (CardLayout) panelCard.getLayout();
+        addPaneles();
     }
 
     /**
@@ -26,47 +38,50 @@ public class Ventana extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        panelHeader = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        panelCard = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1000, 800));
         setPreferredSize(new java.awt.Dimension(1000, 800));
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+        panelHeader.setBackground(new java.awt.Color(204, 255, 255));
+        panelHeader.setLayout(new javax.swing.BoxLayout(panelHeader, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Control Financiero");
-        jPanel1.add(jLabel1);
+        panelHeader.add(jLabel1);
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(panelHeader, java.awt.BorderLayout.PAGE_START);
 
-        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        panelCard.setBackground(new java.awt.Color(255, 255, 255));
+        panelCard.setLayout(new java.awt.CardLayout());
+        getContentPane().add(panelCard, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addPaneles(){
+        addPanel(getBean(PanelLogin.class));
+        addPanel(getBean(PanelCuentas.class));
+    }
+    
+    public void addPanel(PanelUnico panel){
+        panelCard.add(panel.getUIName(), panel);
+        panel.setMostrar(c -> {
+            PanelUnico panelNext = (PanelUnico)getBean(c);
+            cardLayout.show(panelCard, panelNext.getUIName());//.next(panelCard);
+        });
+    }
+    
+    public <T> T getBean(Class<T> t){
+        return context.getBean(t);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel panelCard;
+    private javax.swing.JPanel panelHeader;
     // End of variables declaration//GEN-END:variables
 }

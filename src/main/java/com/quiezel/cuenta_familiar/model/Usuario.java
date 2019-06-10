@@ -25,6 +25,9 @@ public class Usuario {
     private Long id;
     private String userName;
 
+    public Usuario() {
+    }
+
     public Usuario(String userName) {
         this.userName = userName;
     }
@@ -63,4 +66,10 @@ public class Usuario {
         cuentas.remove(cuenta);
         cuenta.setUsuario(null);
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "id=" + id + ", userName=" + userName + '}';
+    }
+    
 }

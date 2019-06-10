@@ -5,6 +5,9 @@
  */
 package com.quiezel.cuenta_familiar.view.componentes;
 
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+
 /**
  *
  * @author CREE Durango
@@ -24,6 +27,12 @@ public abstract class PanelUnico extends javax.swing.JPanel {
     public abstract String getUIName();
     
     public abstract String getPermiso();
+    
+    protected Consumer<Class> mostrar;
+
+    public void setMostrar(Consumer<Class> mostrar) {
+        this.mostrar = mostrar;
+    }
 
     /**
      * Creates new form panelUnico

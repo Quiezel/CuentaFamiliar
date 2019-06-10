@@ -5,24 +5,27 @@
  */
 package com.quiezel.cuenta_familiar.controller;
 
+import com.quiezel.cuenta_familiar.view.PanelLogin;
 import com.quiezel.cuenta_familiar.view.Ventana;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Chalio
  */
-public class Inicio {
+@Component
+public class Inicio implements ApplicationContextAware{
+    private ApplicationContext context;
     private Ventana ventana;
-    private static ConfigurableApplicationContext context;
 
-    public Inicio(ConfigurableApplicationContext context) {
-        Inicio.context = context;
-        ventana = new Ventana();
-        load();
+    public Inicio() {
     }
     
-    private void load(){
+    public void load(){
+        ventana = context.getBean(Ventana.class);
         ventana.setLocationRelativeTo(null);
         ventana.setVisible(true);
     }
@@ -31,15 +34,12 @@ public class Inicio {
         if (ventana != null) {
             ventana.dispose();
         }
-        ventana = new Ventana();
+        ventana = new Ventana(context);
         load();
     }
-    
-    private void addPaneles(){
-        
-    }
-    
-    public static <T> T getBean(Class<T> t){
-        return context.getBean(t);
+
+    @Override
+    public void setApplicationContext(ApplicationContext ac) throws BeansException {
+        context = ac;
     }
 }

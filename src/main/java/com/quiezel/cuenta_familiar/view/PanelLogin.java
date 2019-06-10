@@ -7,7 +7,7 @@ package com.quiezel.cuenta_familiar.view;
 
 import com.quiezel.cuenta_familiar.model.Usuario;
 import com.quiezel.cuenta_familiar.model.repos.UsuarioRepo;
-import java.util.HashMap;
+import com.quiezel.cuenta_familiar.view.componentes.PanelUnico;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
  * @author Chalio
  */
 @Component
-public class PanelLogin extends javax.swing.JPanel {
+public class PanelLogin extends PanelUnico{
+    private String UIName = "Login";
     @Autowired
     private UsuarioRepo repo;
     private Map<String, Usuario> usuarios;
@@ -28,7 +29,7 @@ public class PanelLogin extends javax.swing.JPanel {
      */
     public PanelLogin() {
         initComponents();
-        loadUsuarios();
+//        loadUsuarios();
     }
 
     /**
@@ -40,7 +41,6 @@ public class PanelLogin extends javax.swing.JPanel {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        comboListaUsuarios = new javax.swing.JComboBox<>();
         botonIniciarSesion = new javax.swing.JButton();
         botonNuevoUsuario = new javax.swing.JButton();
         fieldUsuario = new javax.swing.JTextField();
@@ -49,20 +49,12 @@ public class PanelLogin extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.GridBagLayout());
 
-        comboListaUsuarios.addActionListener(new java.awt.event.ActionListener() {
+        botonIniciarSesion.setText("Iniciar Sesion");
+        botonIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboListaUsuariosActionPerformed(evt);
+                botonIniciarSesionActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.1;
-        gridBagConstraints.insets = new java.awt.Insets(3, 50, 3, 50);
-        add(comboListaUsuarios, gridBagConstraints);
-
-        botonIniciarSesion.setText("Iniciar Sesion");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -107,35 +99,33 @@ public class PanelLogin extends javax.swing.JPanel {
         if (!fieldUsuario.getText().isEmpty()) {
             repo.save(new Usuario(fieldUsuario.getText()));
         }
-        loadUsuarios();
     }//GEN-LAST:event_botonNuevoUsuarioActionPerformed
 
-    private void comboListaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboListaUsuariosActionPerformed
+    private void botonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIniciarSesionActionPerformed
         // TODO add your handling code here:
-        if (comboListaUsuarios.getSelectedIndex() >= 0) {
-            fieldUsuario.setText(comboListaUsuarios.getSelectedItem().toString());
-        }
-    }//GEN-LAST:event_comboListaUsuariosActionPerformed
+        System.out.println(repo.findByUserName(fieldUsuario.getText()));
+        mostrar.accept(PanelCuentas.class);
+    }//GEN-LAST:event_botonIniciarSesionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonIniciarSesion;
     private javax.swing.JButton botonNuevoUsuario;
-    private javax.swing.JComboBox<String> comboListaUsuarios;
     private javax.swing.JTextField fieldPassword;
     private javax.swing.JTextField fieldUsuario;
     // End of variables declaration//GEN-END:variables
 
-    private void loadUsuarios() {
-        usuarios = new HashMap<>();
-        comboListaUsuarios.removeAllItems();
-        for (Usuario usuario : repo.findAll()) {
-            usuarios.put(usuario.getUserName(), usuario);
-            comboListaUsuarios.addItem(usuario.getUserName());
-        }
-    }
-
     public Usuario getAutenticado() {
         return autenticado;
+    }
+
+    @Override
+    public String getUIName() {
+        return UIName;
+    }
+
+    @Override
+    public String getPermiso() {
+        return "*";
     }
 }
